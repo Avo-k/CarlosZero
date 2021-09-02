@@ -75,7 +75,7 @@ class Board_3x3:
         for line in self.grid:
             board += "| "
             for sq in line:
-                board += ("O" if sq == 1 else "X" if sq else ".") + " | "
+                board += ("X" if sq == 1 else "O" if sq else ".") + " | "
             board += "\n"
         return board
 
@@ -105,7 +105,7 @@ class Morp:
     def run(self, grid):
         self.root = Node(grid, None)
 
-        for iteration in range(1000):
+        for iteration in range(10000):
             node = self.select(self.root)
             score = self.rollout(node.board)
             self.backpropagate(node, score)
@@ -173,6 +173,7 @@ def main():
 
         legal_moves = b.legal_moves()
         move = (-1, -1)
+        # move = random.choice(legal_moves)
 
         if turn:
             print(b)
