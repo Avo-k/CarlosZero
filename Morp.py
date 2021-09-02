@@ -66,6 +66,9 @@ class Board_3x3:
                     states.append(self.make_move((x, y)))
         return states
 
+    def legal_moves(self):
+        return [*zip(*np.where(self.grid == 0))]
+
     def __str__(self):
         board = ""
         for line in self.grid:
