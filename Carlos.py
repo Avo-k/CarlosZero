@@ -2,6 +2,7 @@ import math
 import numpy as np
 import random
 import time
+import re
 
 
 def get_sub_lines(sub_grid, move):
@@ -125,14 +126,12 @@ class Board_9x9:
         return self.make_move(random.choice(self.legal_moves()))
 
     def __str__(self):
-        board = ""
+        board = "\n    0 1 2   3 4 5   6 7 8\n"
 
         rows = iter(range(9))
 
         for i in range(3):
-            if not i:
-                board += "    0 1 2   3 4 5   6 7 8\n"
-            else:
+            if i:
                 board += "   " + "-" * 23 + "\n"
             for j in range(3):
                 board += f"{next(rows)} | "
@@ -181,7 +180,6 @@ class Carlos:
     def __init__(self, print_info=False):
         self.root = Node(Board_9x9(), None)
         self.print_info = print_info
-
 
     def run(self, board, time_limit=1, n_iter=10000):
 
@@ -271,3 +269,49 @@ class Carlos:
                 best_moves.append(child_node)
 
         return random.choice(best_moves)
+
+
+
+def main():
+
+    carlos = Carlos(print_info=False)
+    b = Board_9x9()
+    turn = 0
+
+    print(b)
+    print("""You play the crosses 'X' please enter a move in the form 'x y' 
+    where x is the row and y is the column and both are integers 0 to 8 inclusive\n""")
+
+    while not b.is_leaf:
+
+        if turn:
+            b = carlos.run(b, 1, 10000).board
+            print(b)
+            print("Carlos played:", *b.last_move)
+
+        else:
+            move = (-1, -1)
+            legal_moves = b.legal_moves()
+            # move = random.choice(legal_moves)
+            while move not in legal_moves:
+                examples = random.sample(legal_moves,k=9) if len(legal_moves) > 9 else legal_moves
+                print(end="some legal moves: ")
+                print(*[repr(f"{x} {y}") for x, y in examples], sep=", ")
+                move = input("Your move: ")
+                if re.match(r"[0-8]\s[0-8]", move):
+                    move = tuple(map(int, move.split()))
+                else:
+                    print(repr(move), "is an illegal move")
+            b = b.make_move(move)
+
+        turn ^= 1
+
+    print(b)
+    print("You win!" if b.term > 0 else "You lose" if b.term < 0 else "The game is a draw")
+    input("press enter to play again")
+    main()
+
+
+if __name__ == "__main__":
+    main()
+
