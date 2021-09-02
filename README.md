@@ -35,7 +35,8 @@ her last move:
 7 | . . . | . . . | . . . |
 8 | . . . | . . . | . . . |
     0 1 2   3 4 5   6 7 8
-    
+
+(moves in the form 'row column')
 legal moves: '0 3', '0 4', '0 5', '1 3', '1 4', '1 5', '2 3', '2 4', '2 5'
 ```
 For example, if X played in the top right square of their local board, 
