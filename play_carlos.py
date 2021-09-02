@@ -26,7 +26,8 @@ def main():
             # move = random.choice(legal_moves)
             while move not in legal_moves:
                 examples = random.sample(legal_moves,k=9) if len(legal_moves) > 9 else legal_moves
-                print("example of legal moves: ", [f"{x} {y}" for x, y in examples])
+                print(end="example of legal moves: ")
+                print(*[repr(f"{x} {y}") for x, y in examples], sep=", ")
                 move = input("Your move: ")
                 if re.match(r"[0-8]\s[0-8]", move):
                     move = tuple(map(int, move.split()))

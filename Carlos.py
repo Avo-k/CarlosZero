@@ -142,9 +142,9 @@ class Board_9x9:
                         if sq == 0:
                             board += ". "
                         elif sq == 1:
-                            board += "O "
-                        else:
                             board += "X "
+                        else:
+                            board += "O "
                     board += "| "
                 board += "\n"
         board += "    0 1 2   3 4 5   6 7 8\n"
