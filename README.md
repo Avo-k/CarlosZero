@@ -8,9 +8,23 @@ and choose which move is best in given positions.
 - **Morp** plays classical Tic-Tac-Toe (3\*3 grid)
 - **Carlos** plays ultimate Tic-Tac-Toe (3\*3\*3 grid)
 
+## Morp
+
+### Classical Tic-Tac-Toe rules
+
+To win the game, a player must place three of their marks in a horizontal, vertical, or diagonal row.
+example of a game won by the second player, 'O':
+
+```
+| O | X | . | 
+| O | O | X | 
+| O | X | X | 
+```
+
+
 ## Carlos
 
-### Ultimate TicTacToe rules
+### Ultimate Tic-Tac-Toe rules
 
 Ultimate tic-tac-toe is a board game composed of nine tic-tac-toe boards
 arranged in a 3 × 3 grid. Players take turns playing in the smaller
@@ -19,7 +33,6 @@ tic-tac-toe boards until one of them wins in the larger tic-tac-toe board.
 Put simply you need to win 3 tic-tac-toe boards in a row to win the game. 
 But you can only play in the grid relative to where your opponent played 
 her last move:
-
 
 ```
     0 1 2   3 4 5   6 7 8
@@ -51,4 +64,4 @@ Once a local board is won by a player or it is filled completely, no
 more moves may be played in that board. If a player is sent to such a 
 board, then that player may play in any other board.
 
-source [wikipedia](https://en.wikipedia.org/wiki/Ultimate_tic-tac-toe)
+source [Ultimate_tic-tac-toe on wikipedia](https://en.wikipedia.org/wiki/Ultimate_tic-tac-toe)
