@@ -2,6 +2,7 @@ import math
 import random
 import numpy as np
 import re
+from Bitboards import Bitboard_3x3
 
 
 class Board_3x3:
@@ -14,11 +15,6 @@ class Board_3x3:
 
         self.ply = 0
 
-    def three(self):
-        yield from set(map(tuple, (self.grid[0], self.grid[1], self.grid[2],
-                    self.grid[:, 0], self.grid[:, 1], self.grid[:, 2],
-                    self.grid.diagonal(), np.diag(np.fliplr(self.grid)))))
-
     def get_lines(self, move):
         x, y = move
         lines = [self.grid[x], self.grid[:, y]]
@@ -30,13 +26,6 @@ class Board_3x3:
 
     def was_winning_move(self, move):
         for line in self.get_lines(move):
-            s = sum(line)
-            if abs(s) == 3:
-                return s//3
-        return 0
-
-    def is_won(self) -> int:
-        for line in self.three():
             s = sum(line)
             if abs(s) == 3:
                 return s//3
@@ -59,13 +48,10 @@ class Board_3x3:
         return new_board
 
     def generate_states(self):
-        states = []
-        if self.is_leaf: return states
         for x, line in enumerate(self.grid):
             for y, sq in enumerate(line):
                 if sq == 0:
-                    states.append(self.make_move((x, y)))
-        return states
+                    yield self.make_move((x, y))
 
     def legal_moves(self):
         return [*zip(*np.where(self.grid == 0))]
@@ -117,18 +103,27 @@ class Morp:
             if node.is_fully_expanded:
                 node = self.get_best_move(node, 2)
             else:
-                return self.expand(node)
+                return self.better_expand(node)
         return node
+
+    def better_expand(self, node):
+        states = node.board.generate_states()
+        for state in states:
+            if (h := str(state)) not in node.children:
+                node.children[h] = (new_node := Node(state, node))
+                if next(states, -1) == -1:
+                    node.is_fully_expanded = True
+                return new_node
+        assert 1 == 2
 
     def expand(self, node):
         states = node.board.generate_states()
-        for state in states:
-            if str(state) not in node.children:
-                new_node = Node(state, node)
-                node.children[str(state)] = new_node
-                if len(states) == len(node.children):
-                    node.is_fully_expanded = True
-
+        n_moves = len(node.board.legal_moves())
+        for board_state in states:
+            if str(board_state) not in node.children:
+                new_node = Node(board_state, node)
+                node.children[str(board_state)] = new_node
+                node.is_fully_expanded = len(node.children) == n_moves
                 return new_node
 
         assert 1 == 0, "illegal move"
@@ -136,7 +131,7 @@ class Morp:
     @staticmethod
     def rollout(board):
         while not board.is_leaf:
-            board = random.choice(board.generate_states())
+            board = board.make_random_move()
         return board.term
 
     def backpropagate(self, node, score):
@@ -165,7 +160,8 @@ class Morp:
 
 
 def main():
-    b = Board_3x3()
+    # b = Board_3x3()
+    b = Bitboard_3x3()
     m = Morp()
     turn = 1
 
@@ -177,6 +173,7 @@ def main():
 
         if turn:
             print(b)
+            # move = random.choice(legal_moves)
             while move not in legal_moves:
                 print("legal moves: ", [f"{x} {y}" for x, y in legal_moves])
                 move = input("your move:")

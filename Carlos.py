@@ -219,13 +219,6 @@ class Carlos:
         return node
 
     @staticmethod
-    def fully_expand(node):
-        states = node.board.generate_states()
-        for state in states:
-            node.children[hash(state)] = Node(state, node)
-        node.is_fully_expanded = True
-
-    @staticmethod
     def expand(node):
         states = node.board.generate_states()
 
